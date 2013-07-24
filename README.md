@@ -9,7 +9,7 @@ markdown. Otherwise, I've included `generate`, a simple script that
 wraps pandoc with some standard options I use. To build a presentation
 PDF:
 
-    $ ./generate 01-kickoff.md
+    $ ./generate 01-workshop.md
 	
 You will need to install the dependencies for pandoc. For Ubuntu, these are:
 
