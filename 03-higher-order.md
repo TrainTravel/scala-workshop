@@ -16,9 +16,9 @@ def factorial(n: Int): Int = {
 }
 ````
 
-* What concerns do we have recursive implementations?
+* What concerns do we have about recursive implementations?
 * How we would rewrite this again to be imperative?
-* Can the compiler do that for us?
+* Can the compiler do that for us????!
 
 
 Iterative version
@@ -105,26 +105,32 @@ Group question
 * Trick question: what does that mean, "made"?
 
 
-S99 problems
-============
+S-99: Ninety-nine Scala problems
+================================
+
+* Adapted from an original list of Prolog problems
+* Simple, sweet, good way to think through problems *functionally*, using higher-order approaches
+
+
+http://aperiodic.net/phil/scala/s-99/
 
 
 P01 - Find the last element of a list
 =====================================
 
 ````scala
-	assert(last(List(1, 1, 2, 3, 5, 8)) == 8)
+assert(last(List(1, 1, 2, 3, 5, 8)) == 8)
 ````
 
 Solution
 ========
 
 ````scala
-	def last[T](xs: List[T]): T = xs match {
-		case x :: Nil => x
-		case x :: xs1 => last(xs1)
-		case Nil => throw new NoSuchElementException
-	}
+def last[T](xs: List[T]): T = xs match {
+  case x :: Nil => x
+  case x :: xs1 => last(xs1)
+  case Nil => throw new NoSuchElementException
+}
 ````
 
 
@@ -132,7 +138,7 @@ P02 - Find the last but one element of a list
 =============================================
 
 ````scala
-	assert(penultimate(List(1, 1, 2, 3, 5, 8)) == 5)
+assert(penultimate(List(1, 1, 2, 3, 5, 8)) == 5)
 ````
 
 
@@ -140,52 +146,45 @@ Solution
 ========
 
 ````scala
-	def penultimate[T](xs: List[T]): T = xs match {
-		case x :: _ :: Nil => x
-		case x :: xs1 => penultimate(xs1)
-		case Nil => throw new NoSuchElementException
-	}
+def penultimate[T](xs: List[T]): T = xs match {
+  case x :: _ :: Nil => x
+  case x :: xs1 => penultimate(xs1)
+  case Nil => throw new NoSuchElementException
+}
 ````
 
-Group exercise: P03 Find the Kth element of a list
-==================================================
+Group exercises:
+
+>* P03 Find the Kth element of a list
 
 ````scala
-	assert(nth(2, List(1, 1, 2, 3, 5, 8)) == 2)
+assert(nth(2, List(1, 1, 2, 3, 5, 8)) == 2)
 ````
 
-
-
-Solution
-========
+>* P04 Find the number of elements of a list
 
 ````scala
-	def nth[T](n: Int, xs: List[T]): T = xs match {
-		case x :: xs1 if n == 0 => x
-		case x :: xs1 => nth(n-1, xs1)
-		case Nil => throw new NoSuchElementException
-	}
-````
-  
-
-
-P04 Find the number of elements of a list
-==========================================
-
-````scala
-	assert(length(List(1, 1, 2, 3, 5, 8)) == 6)
-	assert(length(Nil) == 0)
+assert(length(List(1, 1, 2, 3, 5, 8)) == 6)
+assert(length(Nil) == 0)
 ````
 
 
-Solution
-========
+Solutions
+=========
 
 ````scala
-	def length[T](xs: List[T], n: Int = 0): Int = xs match {
-		case Nil => n
-		case _ :: xs1 => length(xs1, n+1)
-	}
+def nth[T](n: Int, xs: List[T]): T = xs match {
+  case x :: xs1 if n == 0 => x
+  case x :: xs1 => nth(n-1, xs1)
+  case Nil => throw new NoSuchElementException
+}
+````
+
+````scala
+def length[T](xs: List[T], n: Int = 0): Int = xs match {
+  case Nil => n
+  case _ :: xs1 => length(xs1, n+1)
+}
 ````
 
 
@@ -193,39 +192,46 @@ P05 Reverse a list
 ==================
 
 ````scala
-	assert(reverse(List(1, 1, 2, 3, 5, 8)) ==
-           List(8, 5, 3, 2, 1, 1))
+assert(reverse(List(1, 1, 2, 3, 5, 8)) ==
+  List(8, 5, 3, 2, 1, 1))
 ````
 
 
 Solution
 ========
 
+Simply use `:::` which appends two lists together:
+
 ````scala
-	def reverse[T](xs: List[T]): List[T] = xs match {
-		case Nil => Nil
-		case x :: xs1 => reverse(xs1) ::: x :: Nil
-	}
+def reverse[T](xs: List[T]): List[T] = xs match {
+  case Nil => Nil
+  case x :: xs1 => reverse(xs1) ::: x :: Nil
+}
 ````
 
 
 (Bad) Solution
 ==============
 
+Actually that's a terrible solution; why?
+
 ````scala
-	def reverse[T](xs: List[T]): List[T] = xs match {
-		case Nil => Nil
-		case x :: xs1 => reverse(xs1) ::: x :: Nil
-	}
+def reverse[T](xs: List[T]): List[T] = xs match {
+  case Nil => Nil
+  case x :: xs1 => reverse(xs1) ::: x :: Nil
+}
 ````
+
+`foldLeft`
+==========
 
 
 Solution
 ========
 
 ````scala
-	def reverse[T](xs: List[T]): List[T] =
-		xs.foldLeft(List[T]()) { (ys, y) => y :: ys }
+def reverse[T](xs: List[T]): List[T] =
+  xs.foldLeft(List[T]()) { (ys, y) => y :: ys }
 ````
 
 
@@ -233,8 +239,8 @@ Or this one
 ===========
 
 ````scala
-	def reverse[T](xs: List[T]): List[T] =
-		(List[T]() /: xs) { (ys, y) => y :: ys }
+def reverse[T](xs: List[T]): List[T] =
+  (List[T]() /: xs) { (ys, y) => y :: ys }
 ````
 
 
@@ -242,7 +248,7 @@ P06 Find out whether a list is a palindrome
 ===========================================
 
 ````scala
-	assert(isPalindrome(List(1, 2, 3, 2, 1)))
+assert(isPalindrome(List(1, 2, 3, 2, 1)))
 ````
 
 
@@ -250,6 +256,11 @@ Solution
 ========
 
 ?
+
+
+For expressions
+===============
+
 
 
 P08 Eliminate consecutive duplicates of list elements
@@ -293,16 +304,16 @@ Solution
 ========
 
 ````scala
-	def pack[T](xs: List[T]): List[List[T]] = xs match {
-		case Nil => List(Nil)
-		case _ => {
-			val (packed, next) = xs.span { _ == xs.head }
-			next match {
-				case Nil => List(packed)
-				case _ => packed :: pack(next)
-			}
-		}
-	}
+def pack[T](xs: List[T]): List[List[T]] = xs match {
+  case Nil => List(Nil)
+  case _ => {
+    val (packed, next) = xs.span { _ == xs.head }
+    next match {
+      case Nil => List(packed)
+      case _ => packed :: pack(next)
+    }
+  }
+}
 ````
 
 
@@ -322,8 +333,8 @@ map
 `xs map f` - apply `f` to all elems in `xs`
 
 ````scala
-	def square(x: Int): Int = x * x
-	List(1,2,3,4,5) map square
+def square(x: Int): Int = x * x
+List(1,2,3,4,5) map square
 ````
 
 
@@ -333,10 +344,10 @@ map
 Equivalence:
 
 ````scala
-	for (x <- List(1,2,3,4,5)) yield square(x)
+for (x <- List(1,2,3,4,5)) yield square(x)
 ````
 
-* We will see that this equivalence is actually deep
+* We will see that this equivalence is actually very deep
 
 
 Group exercise
@@ -347,16 +358,6 @@ Complete the following koans:
 * AboutForExpressions
 * AboutHigherOrderFunctions
 
-* AboutValAndVar
-* AboutLiteralNumbers
-* AboutLiteralStrings
-* About Tuples
-* AboutLists
-* AboutPatternMatching
-* AboutPreconditions
-
-
-
 
 foldLeft
 ========
@@ -366,13 +367,13 @@ foldLeft
 * Synonym `/:`
 
 ````scala
-	def sum(xs: List[Int]): Int = {
-		(0 /: xs) (_ + _)
-	}
+def sum(xs: List[Int]): Int = {
+  (0 /: xs) (_ + _)
+}
 
-	def sum(xs: List[Int]): Int = {
-		xs.foldLeft(0) (_ + _)
-	}
+def sum(xs: List[Int]): Int = {
+  xs.foldLeft(0) (_ + _)
+}
 ````
 
 
@@ -383,9 +384,9 @@ xs `filter` p - returns the list of elems for which p is true
 
 
 ````scala
-	def odds(xs: List[Int]):List[Int] = {
-		xs filter (_ % 2 == 1)
-	}
+def odds(xs: List[Int]):List[Int] = {
+  xs filter (_ % 2 == 1)
+}
 ````
 
 
@@ -393,9 +394,9 @@ filter, for expression variant
 ==============================
 
 ````scala
-	def odds(xs: List[Int]):List[Int] = {
-		for (x <-xs if x % 2 == 1) yield x
-	}
+def odds(xs: List[Int]):List[Int] = {
+  for (x <-xs if x % 2 == 1) yield x
+}
 ````
 
 
@@ -405,10 +406,10 @@ find
 `xs find p` - first element in `xs` that satisfies `p`
 
 ````scala
-	def isOdd(x: Int): Boolean = x % 2 == 1
+def isOdd(x: Int): Boolean = x % 2 == 1
 	
-	List(1, 2, 3, 4, 5) find isOdd
-	List(1, 2, 3, 4, 5) find (_ % 2 == 1)
+List(1, 2, 3, 4, 5) find isOdd
+List(1, 2, 3, 4, 5) find (_ % 2 == 1)
 ````
 	
 
@@ -418,8 +419,8 @@ partition
 `xs partition p` - returns tuple of two lists - (satisifes `p`, doesn't satisfy `p`)
 
 ````scala
-	List(1, 2, 3, 4, 5) partition isOdd
-	List(1, 2, 3, 4, 5) partition (_ % 2 == 1)
+List(1, 2, 3, 4, 5) partition isOdd
+List(1, 2, 3, 4, 5) partition (_ % 2 == 1)
 ````
 	
 
@@ -429,9 +430,9 @@ takeWhile
 `xs takeWhile p` - returns a list with the longest prefix satisfying `p`
 
 ````scala
-	List(1, 2, 3, 4, 5) takeWhile isOdd
-	List(1, 2, 3, 4, 5) takeWhile (_ < 3)
-	List(1, 2, 3, 4, 5) takeWhile (_ > 3)
+List(1, 2, 3, 4, 5) takeWhile isOdd
+List(1, 2, 3, 4, 5) takeWhile (_ < 3)
+List(1, 2, 3, 4, 5) takeWhile (_ > 3)
 ````
 	
 
@@ -439,15 +440,13 @@ takeWhile
 dropWhile
 =========
 
-`xs dropWhile p` - returns a list with the longest prefix *not* satisfying `p`
+`xs dropWhile p` - returns the remaining list *after* the longest prefix satisfying `p`
 
 ````scala
 	List(1, 2, 3, 4, 5) dropWhile isOdd
 	List(1, 2, 3, 4, 5) dropWhile (_ < 3)
 	List(1, 2, 3, 4, 5) dropWhile (_ > 3)
 ````
-
-(Note this slide is wrong. Please submit a pull request to fix.)
 
 
 span
@@ -498,9 +497,9 @@ exists, forall
 `xs forall p` is true if all elements in the list `xs` satisfy `p`
 
 ````scala
-	def hasZeroRow(m: List[List[Int]]) = {
-		m exists (row => row forall (x == 0))
-	}
+def hasZeroRow(m: List[List[Int]]) = {
+  m exists (row => row forall (x == 0))
+}
 ````
 
 
@@ -508,29 +507,29 @@ exists, forall
 =========================
 
 ````scala
-	def exists[T](xs: List[T], p: T => Boolean): Boolean = {
-		xs.foldLeft(false)(_ || p(_))
-	}
+def exists[T](xs: List[T], p: T => Boolean): Boolean = {
+  xs.foldLeft(false)(_ || p(_))
+}
 ````
 	
 	
-`forall` using `foldLeft`
-=========================
+Group exercise: `forall` using `foldLeft`
+=========================================
 	
 ````scala
-	def forall[T](xs: List[T], p: T => Boolean): Boolean = {
-		throw new UnsupportedOperationException
-	}
+def forall[T](xs: List[T], p: T => Boolean): Boolean = {
+  throw new UnsupportedOperationException
+}
 ````
 
 
-`forall` using `foldLeft`
-=========================
+Solution: `forall` using `foldLeft`
+===================================
 
 ````scala
-	def forall[T](xs: List[T], p: T => Boolean): Boolean = {
-		xs.foldLeft(true)(_ && p(_))
-	}
+def forall[T](xs: List[T], p: T => Boolean): Boolean = {
+  xs.foldLeft(true)(_ && p(_))
+}
 ````
 
 
@@ -559,7 +558,7 @@ def factorial(n: Int): Int = {
 }
 ````
 
-This function can call itself because it knows what to call...
+This function can call itself because it knows what to call... right?
 
 
 Fixed points
@@ -570,7 +569,7 @@ Fixed points
 * Functions can no fixed points, or they may have many
 * Think of a quadratic equation
 
-Follows this presentation (but for JavaScript): http://matt.might.net/articles/implementation-of-recursive-fixed-point-y-combinator-in-javascript-for-memoization/
+Follows this presentationm, albeit for JavaScript: http://matt.might.net/articles/implementation-of-recursive-fixed-point-y-combinator-in-javascript-for-memoization/
 
 
 Demo: Wolfram Alpha
@@ -596,7 +595,8 @@ $f = F(f)$ ?
 * Remember our demo: we have solved for $x$
 * Could we also solve for $f$?
 * If so, we could eliminate recursion from a recursive function
-* No recursion, no iteration, instead just explicit calls
+* `F` would be a fixed point
+* No recursion, no iteration, instead we would only have explicit calls
 * Actually can be useful through *memoization*
 
 

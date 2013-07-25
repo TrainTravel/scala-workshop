@@ -6,7 +6,8 @@ Goals for workshop
 ==================
 
 * Brief introduction to some essentials of Scala programming
-* You still need to learn the rest!
+* You still need to learn the rest afterwards! (A journey of a lifetime...)
+* Combination of short lectures, followed by various group exercises
 
 
 Resources
@@ -15,8 +16,16 @@ Resources
 * Programming in Scala, 2nd Edition http://www.artima.com/shop/programming_in_scala_2ed (first edition is available for free)
 * Functional Programming in Scala http://www.manning.com/bjarnason/
 * Martin Odersky, Functional Programming Principles in Scala, Coursera https://www.coursera.org/course/progfun
-* Use the source! https://github.com/scala/scala
+* Use the source, Luke! https://github.com/scala/scala
 * Good docs, with links to the source: http://www.scala-lang.org/api/
+
+
+Introductions
+=============
+
+* My background
+* Your background
+* Time to pair up (or into triples)
 
 
 Get ready: group exercise
@@ -29,8 +38,7 @@ Get ready: group exercise
 `scala` package
 ===============
 
-`scala` package provides the equivalent of Python's builtins:
-
+`scala` package provides the equivalent of Python's builtins; per the docs:
 
 > Core Scala types. They are always available without an explicit import.
 
@@ -48,22 +56,37 @@ Scala, in the console
 
 ````scala
 object M {  
-    val x: Int = 3  
+  val x: Int = 3  
 }
 ````
 
 * Think of `M` like a module.  Can say: `M.x`
+* Singleton
 
+
+Hello, world!
+=============
+
+Or entry points:
+
+````scala
+object HelloWorld {
+  def main(args: Array[String]) {
+    println("Hello, world!")
+  }
+}
+````
 
 Scala
 =====
 
+Let's look at some examples of the following:
+
 * Literals
 * Types - any value has a type
-* Values, names
+* Values, variables
 * Expressions - operations "waiting to be evaluated"
-* Evaluation
-  * Does order matter?
+* We will get to classes, eventually
 
 
 Group question
@@ -91,8 +114,8 @@ NB: projection is the usual way of describing this in relational databases
 Function basics
 ===============
 
-* Use `def` to define functions
-* Arguments must have types, return type can be occasionally inferred; good practice is to use it in Scala
+* Frequently use `def` to define functions
+* Arguments must have types, return type can be occasionally inferred; good practice is to declare the return type
 * And we require it!
 
 
@@ -107,6 +130,18 @@ val testDivRem = divRem(7,3)
 
 NB: returns a tuple
 
+
+Function values
+===============
+
+But can also use other approaches to define anonymous functions, then assign:
+
+````scala
+def square(x: Int):Int = x * x
+val square: Int => Int = (x: Int) => x * x
+var f: Int => Int = (x: Int) => x * x
+f = (x: Int) => 2 * x
+````
 
 Pattern matching
 ================
@@ -157,15 +192,15 @@ Factorial, imperatively
 =======================
 
 ````scala
-	def factorial(n: Int): Int = {
-		var i = n
-		var acc: Int = 1
-		while (i > 0) {
-			acc *= i
-			i -= 1
-            }
-	    return acc
-	}
+def factorial(n: Int): Int = {
+  var i = n
+  var acc: Int = 1
+  while (i > 0) {
+    acc *= i
+    i -= 1
+  }
+  return acc
+}
 ````
 
 
@@ -173,11 +208,11 @@ Factorial, recursively
 ======================
 
 ````scala
-	def factorial(n: Int): Int =
-		if (n == 0)
-			1
-		else
-			n * factorial(n - 1)
+def factorial(n: Int): Int =
+  if (n == 0)
+    1
+  else
+    n * factorial(n - 1)
 ````
 
 NB: note the implict return
@@ -189,10 +224,10 @@ Pattern matching alternative
 Introduce `match` and `case`:
 
 ````scala
-    def factorial(n: Int): Int = n match {
-        case 0 => 1
-        case _ => n * factorial(n - 1)
-    }
+def factorial(n: Int): Int = n match {
+  case 0 => 1
+  case _ => n * factorial(n - 1)
+}
 ````
 
 
@@ -205,13 +240,13 @@ How can we deal with invalid args in Scala?
 * use `require`
 
 ````scala
-	def factorial(n: Int): Int = {
-		require(n >= 0)
-		n match {
-			case 0 => 1
-			case _b => n * factorial(n - 1)
-		}
-	}
+def factorial(n: Int): Int = {
+  require(n >= 0)
+  n match {
+    case 0 => 1
+    case _ => n * factorial(n - 1)
+  }
+}
 ````
 
 
@@ -229,23 +264,24 @@ Scoping rules for functions
 ===========================
 
 ````scala
-	def plusFour(y: Int): Int = y + four
-	val eight = plusFour(four)
+def plusFour(y: Int): Int = y + four
+val eight = plusFour(four)
 ````
 
 More scoping
 ============
 
 ````scala
-	val y = 28
-	def plusWhat(y: Int): Int = 
-		y + {
-			    val y = 17
-			    y
-		}
-	
-	plusWhat(y+1)
+val y = 28
+def plusWhat(y: Int): Int = 
+  y + {
+    val y = 17
+    y
+  }
+println(plusWhat(y+1))
 ````
+
+What's printed?
 
 
 Group exercise: Ackermann's Function
@@ -293,6 +329,3 @@ def ack(m: Int, n: Int): Int = {
     }
 }
 ````
-
-
-
