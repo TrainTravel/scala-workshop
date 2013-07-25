@@ -182,9 +182,29 @@ def nth[T](n: Int, xs: List[T]): T = xs match {
 ````
 
 ````scala
-def length[T](xs: List[T], n: Int = 0): Int = xs match {
-  case Nil => n
-  case _ :: xs1 => length(xs1, n+1)
+def length[T](xs: List[T]): Int = xs match {
+    case Nil => 0
+    case _ :: tail => 1 + length(tail)
+}
+````
+
+
+Tail recursive version of `length`
+==================================
+
+Tail recursion
+==============
+
+Move calculation into an accumulator:
+
+````scala
+def length[T](xs: List[T]): Int = {
+    @tailrec
+    def lengthTR(n: Int, xs: List[T]): Int = xs match {
+        case Nil => n
+        case _ :: tail => lengthTR(n+1, tail)
+    }
+    lengthTR(0, xs)
 }
 ````
 
@@ -262,6 +282,22 @@ Or this one
 ````scala
 def reverse[T](xs: List[T]): List[T] =
   (List[T]() /: xs) { (ys, y) => y :: ys }
+````
+
+Or this tail recursive version
+==============================
+
+````scala
+def reverse[T](xs: List[T]): List[T] = {
+  @tailrec
+  def reverseTR(xs: List[T], curr: List[T]): List[T] =
+    curr match {
+      case Nil => xs
+      case head :: tail => 
+        reverseTR(head :: xs, tail)
+    }
+  reverseTR(Nil, xs)
+}
 ````
 
 
@@ -518,6 +554,7 @@ val square: Int => Int = (x: Int) => x * x
 var f: Int => Int = (x: Int) => x * x
 f = (x: Int) => 2 * x
 ````
+
 
 Recursion with function values?
 ===============================
