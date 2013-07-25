@@ -18,13 +18,13 @@ def factorial(n: Int): Int = {
 
 * What concerns do we have about recursive implementations?
 * How we would rewrite this again to be imperative?
-* Can the compiler do that for us????!
+* Can the compiler just do that for us????!
 
 
 Iterative version
 =================
 
-This is what we would like the compiler to do - the first implementation we tried:
+Maybe this is what we would like the compiler to do - the first implementation we tried:
 
 ````scala
 def factorial(n: Int): Int = {
@@ -153,7 +153,8 @@ def penultimate[T](xs: List[T]): T = xs match {
 }
 ````
 
-Group exercises:
+Group exercises
+===============
 
 >* P03 Find the Kth element of a list
 
@@ -200,7 +201,7 @@ assert(reverse(List(1, 1, 2, 3, 5, 8)) ==
 Solution
 ========
 
-Simply use `:::` which appends two lists together:
+Simply use `:::` which concatenates two lists together:
 
 ````scala
 def reverse[T](xs: List[T]): List[T] = xs match {
@@ -222,12 +223,32 @@ def reverse[T](xs: List[T]): List[T] = xs match {
 }
 ````
 
-`foldLeft`
-==========
+`foldLeft` on `List` objects
+============================
+
+* A higher-order function: `def foldLeft[B](z: B)(f: (B, A) => B): B`
+* Left associative
+* Note that it takes two parameter lists - curried/partially applicative
+
+````scala
+def sum(xs: List[Int]): Int = {
+  xs.foldLeft(0) (_ + _)
+}
+````
 
 
-Solution
-========
+`/:` as synonym
+===============
+
+````scala
+def sum(xs: List[Int]): Int = {
+  (0 /: xs) (_ + _)
+}
+````
+
+
+Solution with `foldLeft`
+========================
 
 ````scala
 def reverse[T](xs: List[T]): List[T] =
@@ -257,86 +278,22 @@ Solution
 
 ?
 
-
-For expressions
-===============
-
-
-
-P08 Eliminate consecutive duplicates of list elements
-=====================================================
-
-````scala
-	assert(compress(List('a, 'a, 'a, 'a, 'b, 'c, 'c,
-                         'a, 'a, 'd, 'e, 'e, 'e, 'e)) == 
-		   List('a, 'b, 'c, 'a, 'd, 'e))
-    assert(compress(List('a, 'b, 'c, 'c, 'a, 'a, 'd, 'e)) ==
-	       List('a, 'b, 'c, 'a, 'd, 'e))
-````
-
-
-Solution
-========
-
-````scala
-	def compress[T](xs: List[T]): List[T] = {
-		xs.head :: (for ((a, b) <- xs.zip(xs.tail)
-			             if a != b) yield b)
-	}
-````
-
-
-P09 Pack consecutive duplicates of list elements into sublists
-==============================================================
-
-````scala
-	assert(pack(List('a, 'a, 'a, 'a, 'b, 'c, 'c,
-                     'a, 'a, 'd, 'e, 'e, 'e, 'e)) ==
-           List(List('a, 'a, 'a, 'a),
-		       List('b),
-			   List('c, 'c),
-			   List('a, 'a),
-			   List('d),
-			   List('e, 'e, 'e, 'e)))
-````
-
-Solution
-========
-
-````scala
-def pack[T](xs: List[T]): List[List[T]] = xs match {
-  case Nil => List(Nil)
-  case _ => {
-    val (packed, next) = xs.span { _ == xs.head }
-    next match {
-      case Nil => List(packed)
-      case _ => packed :: pack(next)
-    }
-  }
-}
-````
-
-
-
-More on higher-order functions
-==============================
-
-* mapping - `map`, `flatMap`
-* reductions - `foldLeft`, `foldRight`
-* filtering lists - `filter`, `find`, `partition`, `dropWhile`, `takeWhile`, `span`
-* predicates on a list - `forall`, `exists`
-
-
 map
 ===
 
 `xs map f` - apply `f` to all elems in `xs`
 
 ````scala
+def map[B](f: (A) => B): List[B]
+````
+
+Example
+=======
+
+````scala
 def square(x: Int): Int = x * x
 List(1,2,3,4,5) map square
 ````
-
 
 `map` vs `for` expression
 =========================
@@ -359,22 +316,44 @@ Complete the following koans:
 * AboutHigherOrderFunctions
 
 
-foldLeft
-========
 
-* xs 
-* Left associative
-* Synonym `/:`
+P08 Eliminate consecutive duplicates of list elements
+=====================================================
 
 ````scala
-def sum(xs: List[Int]): Int = {
-  (0 /: xs) (_ + _)
-}
+	assert(compress(List('a, 'a, 'a, 'a, 'b, 'c, 'c,
+                         'a, 'a, 'd, 'e, 'e, 'e, 'e)) == 
+		   List('a, 'b, 'c, 'a, 'd, 'e))
+    assert(compress(List('a, 'b, 'c, 'c, 'a, 'a, 'd, 'e)) ==
+	       List('a, 'b, 'c, 'a, 'd, 'e))
+````
 
-def sum(xs: List[Int]): Int = {
-  xs.foldLeft(0) (_ + _)
+`zip`
+=====
+
+Given `xs` and `ys`, return a list of tuples, paired up:
+
+````scala
+def zip[B](that: GenIterable[B]): List[(A, B)]
+````
+
+Solution
+========
+
+````scala
+def compress[T](xs: List[T]): List[T] = {
+  xs.head :: (for ((a, b) <- xs.zip(xs.tail)
+                  if a != b)
+                  yield b)
 }
 ````
+
+
+More on higher-order functions
+==============================
+
+* filtering lists - `filter`, `find`, `partition`, `dropWhile`, `takeWhile`, `span`
+* predicates on a list - `forall`, `exists`
 
 
 filter
@@ -424,8 +403,8 @@ List(1, 2, 3, 4, 5) partition (_ % 2 == 1)
 ````
 	
 
-takeWhile
-=========
+`takeWhile`
+===========
 
 `xs takeWhile p` - returns a list with the longest prefix satisfying `p`
 
@@ -434,11 +413,9 @@ List(1, 2, 3, 4, 5) takeWhile isOdd
 List(1, 2, 3, 4, 5) takeWhile (_ < 3)
 List(1, 2, 3, 4, 5) takeWhile (_ > 3)
 ````
-	
 
-
-dropWhile
-=========
+`dropWhile`
+===========
 
 `xs dropWhile p` - returns the remaining list *after* the longest prefix satisfying `p`
 
@@ -449,8 +426,8 @@ dropWhile
 ````
 
 
-span
-====
+`span`
+======
 
 `xs span p` is the same as `(xs takewhile p, xs dropwhile p)`
 
@@ -475,22 +452,21 @@ Solution
 ========
 
 ````scala
-	def pack[T](xs: List[T]): List[List[T]] = xs match {
-		case Nil => List(Nil)
-		case _ => {
-			val (packed, next) = xs.span { _ == xs.head }
-			next match {
-				case Nil => List(packed)
-				case _ => packed :: pack(next)
-			}
-		}
-	}
+def pack[T](xs: List[T]): List[List[T]] = xs match {
+  case Nil => List(Nil)
+  case _ => {
+    val (packed, next) = xs.span { _ == xs.head }
+    next match {
+      case Nil => List(packed)
+      case _ => packed :: pack(next)
+    }
+  }
+}
 ````
 
 
-
-exists, forall
-==============
+`exists`, `forall`
+==================
 
 `xs exists p` is true if any elements in the list `xs` satisfy `p`
 
