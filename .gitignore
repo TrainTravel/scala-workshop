@@ -2,6 +2,9 @@
 *.log
 *.pdf
 
+# ignore emacs
+*~
+
 # sbt specific
 dist/*
 target/
