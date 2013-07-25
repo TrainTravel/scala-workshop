@@ -6,20 +6,31 @@ errata, diagrams, and other improvements.
 
 You can simply look at these files online using github's support for
 markdown. Otherwise, I've included `generate`, a simple script that
-wraps pandoc with some standard options I use. To build a presentation
+wraps `pandoc` with some standard options I use. To build a presentation
 PDF:
 
     $ ./generate 01-workshop.md
+
+You will need to install the dependencies for `pandoc`. 
+
+
+Installing `pandoc` on Ubuntu
+=============================
+
+It's simple on Ubuntu, as might be expected:
 	
-You will need to install the dependencies for pandoc. For Ubuntu, these are:
-
     sudo apt-get install pandoc
-	sudo apt-get install latex-beamer
+    sudo apt-get install latex-beamer
 
-For OS X, follow the instructions at
-http://johnmacfarlane.net/pandoc/installing.html. In addition, make
-sure you also install the MacTeX-Additions as linked from
-http://www.tug.org/mactex/morepackages.html
+
+Installing `pandoc` on OS X
+===========================
+
+For OS X, download and install the following packages:
+
+1. pandoc DMG at https://code.google.com/p/pandoc/downloads/
+2. BasicTex at http://www.tug.org/mactex/morepackages.html
+3. MacTeX-Additions also at http://www.tug.org/mactex/morepackages.html
 
 
 Help for generate
