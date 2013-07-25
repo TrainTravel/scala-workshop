@@ -6,6 +6,7 @@ $if(colortheme)$
 \usecolortheme{$colortheme$}
 $endif$
 \usepackage{amssymb,amsmath,mathpartir}
+\usepackage{longtable}
 \usepackage{ifxetex,ifluatex}
 \usepackage{fixltx2e} % provides \textsubscript
 \ifxetex

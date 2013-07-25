@@ -1,9 +1,9 @@
-% Scala Workshop
+% Scala Workshop - Intro
 % Jim Baker
 
 
-Goals
-=====
+Goals for workshop
+==================
 
 * Brief introduction to some essentials of Scala programming
 * You still need to learn the rest!
@@ -46,9 +46,11 @@ Scala, in the console
 
 * Scala applications, at the command line or in script
 
-      object M {  
-          val x: Int = 3  
-      }
+````scala
+object M {  
+    val x: Int = 3  
+}
+````
 
 * Think of `M` like a module.  Can say: `M.x`
 
@@ -69,10 +71,21 @@ Group question
 
 True or false: this is valid Scala code:
 
-~~~~
+````scala
 var aString = "abc"
 aString += "123"
-~~~~
+````
+
+Tuples
+======
+
+````scala
+val onet: (Int, Boolean) = (1, true)
+val projectOne = onet._1
+val projectT = onet._2
+````
+
+NB: projection is the usual way of describing this in relational databases
 
 
 Function basics
@@ -87,20 +100,12 @@ Functions
 =========
 
 ````scala
-	def divRem(x: Int, y: Int): (Int, Int) = (x / y, x % y) 
-	val testDivRem = divRem(7,3)
+def divRem(x: Int, y: Int): (Int, Int) = 
+    (x / y, x % y) 
+val testDivRem = divRem(7,3)
 ````
 
-Tuples
-======
-
-````scala
-    val onet: (Int, Boolean) = (1, true)
-    val projectOne = onet._1
-    val projectT = onet._2
-````
-
-NB: projection is the usual way of describing this in relational databases
+NB: returns a tuple
 
 
 Pattern matching
@@ -121,7 +126,7 @@ Unit values
 val u: Unit = ()
 ````
 
-* Think of this as a zero-length tuple (that would the Python equivalent); or of void
+* Think of this as a zero-length tuple (that would the Python equivalent); or of `void`
 * When is this value at all useful?
 
 
@@ -138,12 +143,6 @@ Group question
 
 * True or false: `42 :: 0` is a valid `List[Int]`.
 * Why?
-
-
-Recursion
-=========
-
-* Functional programming vs imperative
 
 
 Factorial definition
@@ -181,9 +180,13 @@ Factorial, recursively
 			n * factorial(n - 1)
 ````
 
+NB: note the implict return
+
 
 Pattern matching alternative
 ============================
+
+Introduce `match` and `case`:
 
 ````scala
     def factorial(n: Int): Int = n match {
@@ -212,8 +215,10 @@ How can we deal with invalid args in Scala?
 ````
 
 
-What introduces new scopes
-==========================
+What introduces new scopes in Scala?
+====================================
+
+Comprehensive list:
 
 * {}
 * functions
@@ -246,6 +251,48 @@ More scoping
 Group exercise: Ackermann's Function
 ====================================
 
+Ackerman's function has the following definition:
+
+$A(m, n) = \begin{cases}
+   n+1               & \text{if } m = 0 \\
+   A(m-1, 1)         & \text{if } m > 0 \text{ and } n = 0 \\
+   A(m-1, A(m, n-1)) & \text{if } m > 0 \text{ and } n > 0
+\end{cases}$
+
+
+Superexponential growth!
+========================
+
+$m$ / $n$ 0             1                   2                     3                            $n$
+--------- ------------- ------------------- --------------------- ---------------------------  ------------------------------------
+0         1             2                   3                     4                            $n + 1$
+1         2             3                   4                     5                            $n + 2$
+2         3             5                   7                     9                            $2n + 3$
+3         5             13                  29                    61                           $2^{(n+3)} - 3$
+4         $2^{2^{2}}-3$ ${2^{2^{2^{2}}}}-3$ $2^{2^{2^{2^{2}}}}-3$ ${2^{2^{2^{2^{2^{2}}}}}}-3$  $\begin{matrix}\underbrace{{2^2}^{{\cdot}^{{\cdot}^{{\cdot}^2}}}} - 3 \\n\mbox{ + 3}\end{matrix}$
+
+
+http://en.wikipedia.org/wiki/Ackermann_function
+
+
+Skeleton for `ack`
+==================
+
+````scala
+def ack(m: Int, n: Int): Int = {
+	require(                           )
+
+    (m, n) match {
+
+	
+	
+	
+	
+
+
+    }
+}
+````
 
 
 
