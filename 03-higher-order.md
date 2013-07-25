@@ -357,11 +357,11 @@ P08 Eliminate consecutive duplicates of list elements
 =====================================================
 
 ````scala
-	assert(compress(List('a, 'a, 'a, 'a, 'b, 'c, 'c,
-                         'a, 'a, 'd, 'e, 'e, 'e, 'e)) == 
-		   List('a, 'b, 'c, 'a, 'd, 'e))
-    assert(compress(List('a, 'b, 'c, 'c, 'a, 'a, 'd, 'e)) ==
-	       List('a, 'b, 'c, 'a, 'd, 'e))
+assert(compress(List('a, 'a, 'a, 'a, 'b, 'c, 'c,
+                     'a, 'a, 'd, 'e, 'e, 'e, 'e)) == 
+       List('a, 'b, 'c, 'a, 'd, 'e))
+assert(compress(List('a, 'b, 'c, 'c, 'a, 'a, 'd, 'e)) ==
+       List('a, 'b, 'c, 'a, 'd, 'e))
 ````
 
 `zip`
@@ -456,9 +456,9 @@ List(1, 2, 3, 4, 5) takeWhile (_ > 3)
 `xs dropWhile p` - returns the remaining list *after* the longest prefix satisfying `p`
 
 ````scala
-	List(1, 2, 3, 4, 5) dropWhile isOdd
-	List(1, 2, 3, 4, 5) dropWhile (_ < 3)
-	List(1, 2, 3, 4, 5) dropWhile (_ > 3)
+List(1, 2, 3, 4, 5) dropWhile isOdd
+List(1, 2, 3, 4, 5) dropWhile (_ < 3)
+List(1, 2, 3, 4, 5) dropWhile (_ > 3)
 ````
 
 
@@ -474,14 +474,14 @@ P09 Pack consecutive duplicates of list elements into sublists
 ==============================================================
 
 ````scala
-	assert(pack(List('a, 'a, 'a, 'a, 'b, 'c, 'c,
-                     'a, 'a, 'd, 'e, 'e, 'e, 'e)) ==
-           List(List('a, 'a, 'a, 'a),
-		       List('b),
-			   List('c, 'c),
-			   List('a, 'a),
-			   List('d),
-			   List('e, 'e, 'e, 'e)))
+assert(pack(List('a, 'a, 'a, 'a, 'b, 'c, 'c,
+                 'a, 'a, 'd, 'e, 'e, 'e, 'e)) ==
+       List(List('a, 'a, 'a, 'a),
+            List('b),
+            List('c, 'c),
+            List('a, 'a),
+	    List('d),
+	    List('e, 'e, 'e, 'e)))
 ````
 
 Solution
@@ -519,7 +519,8 @@ def hasZeroRow(m: List[List[Int]]) = {
 =========================
 
 ````scala
-def exists[T](xs: List[T], p: T => Boolean): Boolean = {
+def exists[T](xs: List[T],
+              p: T => Boolean): Boolean = {
   xs.foldLeft(false)(_ || p(_))
 }
 ````
@@ -529,7 +530,8 @@ Group exercise: `forall` using `foldLeft`
 =========================================
 	
 ````scala
-def forall[T](xs: List[T], p: T => Boolean): Boolean = {
+def forall[T](xs: List[T],
+              p: T => Boolean): Boolean = {
   throw new UnsupportedOperationException
 }
 ````
@@ -539,7 +541,8 @@ Solution: `forall` using `foldLeft`
 ===================================
 
 ````scala
-def forall[T](xs: List[T], p: T => Boolean): Boolean = {
+def forall[T](xs: List[T],
+              p: T => Boolean): Boolean = {
   xs.foldLeft(true)(_ && p(_))
 }
 ````
@@ -598,6 +601,14 @@ So if we have $x = f(x)$, what about
 Just try out at http://www.wolframalpha.com/
 
 
+Back to grade school algebra
+============================
+
+* What if there was a general way to solve for `x`?
+* We know this. Example: rewrite the equation as $ax^2+bx+c=0$
+* Then $x=\frac{-b\pm\sqrt{b^2-4ac\ }}{2a}$
+
+
 Fixed points on functions!
 ==========================
 
@@ -616,9 +627,15 @@ $f = F(f)$ ?
 Solution: fixed point combinator in Scala
 =========================================
 
+One possibility:
+
 ````scala
 def fix[A,B](f: (A=>B)=>(A=>B)): A=>B = f(fix(f))(_)
 ````
+
+* There are other combinators, that don't rely on recursion at all in the combinator => Y combinator
+* Hard to do with Scala's type system; much easier for dynamically typed languages
+
 
 Fixed point with factorial function
 ===================================
