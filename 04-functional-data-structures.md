@@ -1,7 +1,12 @@
 Case classes
 ============
 
-FIXME
+* Simple to define: `case class Point(x: Int, y: Int)` is a complete definition
+* Cases classes automatically get `hashCode`, `equals`, and getters
+* Instances are immutable
+* No need to use `new` to construct, just use the name of the class as a constructor
+* Can add methods as desired
+
 
 Koans group exercise
 ====================
@@ -10,26 +15,77 @@ Koans group exercise
 * AboutCaseClasses
 
 
-Expression trees in Scala
-=========================
+Case classes, by example
+========================
 
-FIXME
+````scala
+sealed abstract class Expr
+case class Var(name: String) extends Expr
+case class Number(num: Int) extends Expr
+case class UnOp(op: String, arg: Expr) extends Expr
+case class BinOp(op: String, left: Expr, right: Expr) extends Expr
+````
 
+Example from *Programming in Scala, 2nd Edition*
+
+
+Recursive pattern matching
+==========================
+
+Case classes make it easy to pattern match:
+
+````scala
+def simplify(expr: Expr): Expr = expr match {
+  case UnOp("-", UnOp("-", e)) =>
+    simplify(e)
+  case BinOp("+", e, Number(0)) =>
+    simplify(e)
+  case BinOp("*", e, Number(1)) =>
+    simplify(e)
+  case UnOp(op, e) =>
+    UnOp(op, simplify(e))
+  case BinOp(op, left, right) =>
+    BinOp(op,
+          simplify(left),
+          simplify(right))
+  case _ => expr
+}
+````
 
 `SearchTree` problem
 ====================
 
-FIXME
+A binary search tree is a binary tree with the following structure:
 
-`SearchTree`
-============
+$n$ is any node in a binary search tree whose data
+value is $d$, left child is $l$, and right child is $r$
 
-Start with this class:
+that satisfies an ordering invariant:
+
+>* all of the data values in the subtree rooted at $l$ must be $< d$
+>* all of the data values in the subtree rooted at $r$ must be $\geq d$
+
+
+Functional `SearchTree`
+=======================
+
+* We will use case classes for the implementation
+* => no mutation of the case classes
+* What is the equivalent for working with `List`?
+* => copies, but with sharing, to create what appears to be mutation
+* While minimizing copies (can I do better than what this problem directs? yes...)
+
+
+Implementing `SearchTree`
+=========================
+
+Start with these class and object definitions:
 
 ````scala
 sealed abstract class SearchTree
 case object Empty extends SearchTree
-case class Node(l: SearchTree, d: Int, r: SearchTree) extends SearchTree
+case class Node(l: SearchTree, d: Int, r: SearchTree)
+  extends SearchTree
 ````
 
 Follows a problem written by my colleague Evan Chang
@@ -129,8 +185,4 @@ assert(sum(Node(Node(Empty, 5, Empty), 42, Empty))
        == 47)
 ````
 
-Final notes
-===========
-
-* Start with your tests
-* Trust me!
+Question: can `sum` be rewritten so it's tail recursive?
