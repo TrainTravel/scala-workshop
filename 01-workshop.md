@@ -5,6 +5,7 @@
 Goals for workshop
 ==================
 
+* Fast paced! No prisoners! Best experience ever!
 * Brief introduction to some essentials of Scala programming
 * You still need to learn the rest afterwards! (A journey of a lifetime...)
 * Combination of short lectures, followed by various group exercises
@@ -287,7 +288,7 @@ What's printed?
 Group exercise: Ackermann's Function
 ====================================
 
-Ackerman's function has the following definition:
+Ackermann's function has the following definition:
 
 $A(m, n) = \begin{cases}
    n+1               & \text{if } m = 0 \\
@@ -328,4 +329,17 @@ def ack(m: Int, n: Int): Int = {
 
     }
 }
+````
+
+
+More problems for the group
+===========================
+
+Implement and test the following:
+
+```scala
+def xor(a: Boolean, b: Boolean): Boolean =
+  throw new UnsupportedOperationException
+def repeat(s: String, n: Int): String = 
+  throw new UnsupportedOperationException
 ````

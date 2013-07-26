@@ -352,7 +352,6 @@ Complete the following koans:
 * AboutHigherOrderFunctions
 
 
-
 P08 Eliminate consecutive duplicates of list elements
 =====================================================
 
@@ -526,8 +525,8 @@ def exists[T](xs: List[T],
 ````
 	
 	
-Group exercise: `forall` using `foldLeft`
-=========================================
+Short group exercise: `forall` using `foldLeft`
+===============================================
 	
 ````scala
 def forall[T](xs: List[T],
@@ -635,6 +634,7 @@ def fix[A,B](f: (A=>B)=>(A=>B)): A=>B = f(fix(f))(_)
 
 * There are other combinators, that don't rely on recursion at all in the combinator => Y combinator
 * Hard to do with Scala's type system; much easier for dynamically typed languages
+
 
 
 Fixed point with factorial function

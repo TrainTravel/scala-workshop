@@ -68,7 +68,9 @@ Build the koans:
 
 Then run all the koans through the iterative process: 
 
+~~~~
 > ~test-only org.functionalkoans.forscala.Koans
+~~~~
 
 
 More on running the koans
@@ -121,10 +123,10 @@ Some basics
 ===========
 
 * `sbt test` knows how to find and run your tests. Use that.
-* `FunSuite` is a good place to start for writing test functions
-* `x should be(...)`, `x should equal(...)`, `intercept[T]`
-
-More docs here: http://www.scalatest.org/getting_started_with_fun_suite
+* `FlatSpec` is a good place to start for writing test functions
+* `x should be(...)`
+* `x should equal(...)` or `x === ...`
+* `intercept[T]` to ensure an exception of type `T` is thrown
 
 
 Group exercise
@@ -133,3 +135,47 @@ Group exercise
 * Create a new project with a simple sbt (use the Koans sbt as a start)
 * Implement Fibonacci, factorial, Ackermann... your choice
 * But first, write the tests for it
+* More docs here: http://www.scalatest.org/user_guide
+
+
+Project layout
+==============
+
+~~~~
++---README.md
++---build.sbt
++---src
+    +---main
+    |---+---scala
+    |       +---ProblemSet.scala
+    +---test
+        |---scala
+            |---ProblemSetSpec.scala
+~~~~
+
+
+Testing with `FlatSpec`
+=======================
+
+````scala
+import org.scalatest.FlatSpec
+import scala.collection.mutable.Stack
+
+class StackSpec extends FlatSpec {
+
+  "A Stack" should "pop values in last-in-first-out order" in {
+    val stack = new Stack[Int]
+    stack.push(1)
+    stack.push(2)
+    assert(stack.pop() === 2)
+    assert(stack.pop() === 1)
+  }
+
+  it should "throw NoSuchElementException if an empty stack is popped" in {
+    val emptyStack = new Stack[String]
+    intercept[NoSuchElementException] {
+      emptyStack.pop()
+    }
+  }
+}
+````
