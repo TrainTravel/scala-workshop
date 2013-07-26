@@ -543,9 +543,29 @@ withFilter?
 * Equivalent to `filter`
 * But guarantees proper ordering
 * Why is this necessary?
-* Does so by using an intermediate object
+* => to avoid building an intermediate result
+* Does so by using an intermediate object to manage the filtering
+
+
+
+From the docs
+=============
+
+From the definition of scala.collection.TraversableLike:
+
+````scala
+  /* ...
+   *  Note: the difference between `c filter p` and `c withFilter p` is that
+   *        the former creates a new collection, whereas the latter only
+   *        restricts the domain of subsequent `map`, `flatMap`, `foreach`,
+   *        and `withFilter` operations.
+   * ...
+   */
+````
 
 http://scala-programming-language.1934581.n4.nabble.com/Rethinking-filter-td2009215.html#a2009218
+
+
 
 
 withFilter in `Option`

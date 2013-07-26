@@ -196,6 +196,8 @@ def length[T](xs: List[T]): Int = xs match {
 Tail recursive version of `length`
 ==================================
 
+What do we need to do?
+
 Tail recursion
 ==============
 
@@ -250,9 +252,14 @@ def reverse[T](xs: List[T]): List[T] = xs match {
 `foldLeft` on `List` objects
 ============================
 
-* A higher-order function: `def foldLeft[B](z: B)(f: (B, A) => B): B`
-* Left associative
-* Note that it takes two parameter lists - curried/partially applicative
+>* A higher-order function:
+
+````scala
+def foldLeft[B](z: B)(f: (B, A) => B): B
+````
+
+>* Left associative
+>* Note that it takes two parameter lists - curried/partially applicative
 
 ````scala
 def sum(xs: List[Int]): Int = {
