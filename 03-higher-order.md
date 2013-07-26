@@ -159,12 +159,16 @@ Group exercises
 >* P03 Find the Kth element of a list
 
 ````scala
+def nth[T](n: Int, xs: List[T]): T  //signature
+
 assert(nth(2, List(1, 1, 2, 3, 5, 8)) == 2)
 ````
 
 >* P04 Find the number of elements of a list
 
 ````scala
+def length[T](xs: List[T]): Int    //signature
+
 assert(length(List(1, 1, 2, 3, 5, 8)) == 6)
 assert(length(Nil) == 0)
 ````
